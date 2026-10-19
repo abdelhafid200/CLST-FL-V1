@@ -1,0 +1,71 @@
+ v3 iid mesure (9s)
+  v3 low mesure (20s)
+  v3 medium mesure (34s)
+  v3 high mesure (43s)
+  reel : hopitaux mesure : 48 clients (50s)
+  reel : unites mesure : 48 clients (59s)
+     types d'unites retenus : Med-Surg ICU (32), CCU-CTICU (7), MICU (3), Neuro ICU (2), SICU (2), Cardiac ICU (1), CSICU (1)
+
+========================================================================================================================
+1) MESURES DU NON-IID (memes 12 variables, meme decoupe que v3)
+========================================================================================================================
+
+-- QUANTITE et ETIQUETTES --
+      partition  K  taille_med  taille_cv  mort_min  mort_med  mort_max  ecart_mort
+         v3 iid 48        2493      0.020     0.081     0.096     0.109       0.004
+         v3 low 48        2507      0.241     0.089     0.131     0.259       0.029
+      v3 medium 48        2303      0.441     0.091     0.184     0.413       0.051
+        v3 high 48        2201      0.602     0.076     0.199     0.386       0.066
+reel : hopitaux 48        1335      0.501     0.047     0.095     0.159       0.022
+  reel : unites 48         876      0.264     0.047     0.101     0.193       0.027
+
+-- COVARIABLES et CONCEPT --
+      partition  auc_domaine  smr_min  smr_med  smr_max  smr_disp  part_smr_sig  auroc_intra  auroc_inter  chute_transfert
+         v3 iid        0.503    0.879    1.001    1.138     0.053         0.021        0.795        0.795            0.000
+         v3 low        0.607    0.702    0.952    1.339     0.158         0.500        0.732        0.686            0.046
+      v3 medium        0.694    0.575    0.949    1.563     0.244         0.771        0.738        0.610            0.128
+        v3 high        0.744    0.504    0.945    1.781     0.314         0.854        0.755        0.539            0.216
+reel : hopitaux        0.635    0.502    0.960    1.553     0.263         0.562        0.791        0.774            0.018
+  reel : unites        0.629    0.529    0.997    1.537     0.268         0.458        0.790        0.771            0.019
+
+-- PERSONNALISATION --
+      partition  brier_poole  brier_local  brier_poole_local  auroc_poole  auroc_poole_local  gain_perso_pct  part_perso
+         v3 iid        0.073        0.074              0.074        0.806              0.795          -1.858       0.146
+         v3 low        0.106        0.104              0.104        0.722              0.732           2.119       0.688
+      v3 medium        0.135        0.123              0.123        0.677              0.739           8.359       0.958
+        v3 high        0.156        0.131              0.131        0.609              0.755          16.150       0.979
+reel : hopitaux        0.074        0.075              0.075        0.802              0.791          -0.877       0.438
+  reel : unites        0.076        0.077              0.077        0.811              0.790          -0.253       0.521
+
+========================================================================================================================
+2) CONTROLE : les niveaux v3 recalcules doivent redonner les chiffres de votre pretraitement
+========================================================================================================================
+  v3 iid    intra 0.795 (ref 0.795) | inter 0.795 (ref 0.795) | gain perso -1.86 % (ref -1.86) | clients 15 % (ref 15) -> OK
+  v3 low    intra 0.732 (ref 0.732) | inter 0.686 (ref 0.686) | gain perso 2.12 % (ref 2.12) | clients 69 % (ref 69) -> OK
+  v3 medium intra 0.738 (ref 0.738) | inter 0.610 (ref 0.61) | gain perso 8.36 % (ref 8.36) | clients 96 % (ref 96) -> OK
+  v3 high   intra 0.755 (ref 0.755) | inter 0.539 (ref 0.539) | gain perso 16.15 % (ref 16.15) | clients 98 % (ref 98) -> OK
+
+========================================================================================================================
+LECTURE : niveau v3 le plus proche, mesure par mesure
+========================================================================================================================
+  reel : hopitaux  covariables          :    0.635  -> le plus proche : v3 low (0.607)
+  reel : hopitaux  etiquettes           :    0.022  -> le plus proche : v3 low (0.029)
+  reel : hopitaux  concept (SMR)        :    0.263  -> le plus proche : v3 medium (0.244)
+  reel : hopitaux  concept (transfert)  :    0.018  -> le plus proche : v3 iid (0.000)
+  reel : hopitaux  personnalisation     :   -0.877  -> le plus proche : v3 iid (-1.858)
+  => reel : hopitaux : profil MIXTE (low x2, iid x2, medium x1) : heterogene sur certains axes, pas sur d'autres
+
+  reel : unites    covariables          :    0.629  -> le plus proche : v3 low (0.607)
+  reel : unites    etiquettes           :    0.027  -> le plus proche : v3 low (0.029)
+  reel : unites    concept (SMR)        :    0.268  -> le plus proche : v3 medium (0.244)
+  reel : unites    concept (transfert)  :    0.019  -> le plus proche : v3 iid (0.000)
+  reel : unites    personnalisation     :   -0.253  -> le plus proche : v3 iid (-1.858)
+  => reel : unites : profil MIXTE (low x2, iid x2, medium x1) : heterogene sur certains axes, pas sur d'autres
+
+NOTE : part_smr_sig (tableau) grandit avec la taille des clients ; la lecture utilise smr_disp, moins sensible a la taille.
+RAPPEL : pour la porte de redeploiement, l'heterogeneite ENTRE clients compte moins que le changement
+DANS un client au cours du temps (etape 4a). Elle decide surtout si FedAvg + FT produit des candidats differents.
+
+
+Sauvegarde dans 'mesure_non_iid/' : mesure_non_iid.csv, mesure_non_iid.png  (total 61s)
+A me renvoyer : la sortie console (sections 1, 2, LECTURE) et la figure mesure_non_iid.png.

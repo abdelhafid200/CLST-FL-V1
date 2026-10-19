@@ -1,0 +1,6 @@
+# Versions NOT recorded during the experiments: fill in from the environment that produced the results
+# (e.g. run `pip list | grep -Ei "^(torch|numpy|pandas|scipy) "` in the same environment).
+numpy
+pandas
+scipy
+torch

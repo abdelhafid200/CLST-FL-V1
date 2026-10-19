@@ -1,0 +1,11 @@
+@'
+.ipynb_checkpoints/
+__pycache__/
+data_v3/
+data_v4_reel/
+dataset/
+mesure_non_iid/
+results_confirm/
+*.pkl
+*.csv.gz
+'@ | Out-File -Encoding utf8 .gitignore
