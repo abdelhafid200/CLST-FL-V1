@@ -1,0 +1,77 @@
+level=high | 48 clients | n_train 460/1408/5764 | K=2 | seeds=[423, 424, 425] | Ditto lambdas=[0.03, 0.1, 0.3] | 9 snapshots/seed | règles: ['compat_k2', 'sel@1.645', 'sel@2.0', 'fedavg_global', 'fomo_orig', 'fomo_upd', 'local_only', 'fedper', 'ditto_l0.03', 'ditto_l0.1', 'ditto_l0.3']
+[seed=423] terminé en 47.0 min
+[seed=424] terminé en 46.3 min
+[seed=425] terminé en 45.5 min
+================================================================================================================================================================
+A0. CONTRÔLES [high] seeds=[423, 424, 425] | FT Brier test moyen=0.1320
+================================================================================================================================================================
+  Brier de VALIDATION moyen des modèles persistants au snapshot retenu : local_only: 0.13479 | fedper: 0.13110 | ditto_l0.03: 0.13187 | ditto_l0.1: 0.13426 | ditto_l0.3: 0.13911
+  Ditto : lambda retenu sur la validation = 0.03 (ditto_l0.03*)  | ATTENTION : au bord de la grille, élargir avant toute conclusion sur Ditto.
+  snapshot retenu pour local_only   : round moyen   8.8 | part des clients au dernier snapshot 0.00 | au premier 0.90
+  snapshot retenu pour fedper       : round moyen  27.1 | part des clients au dernier snapshot 0.15 | au premier 0.19
+  snapshot retenu pour ditto_l0.03  : round moyen  32.3 | part des clients au dernier snapshot 0.19 | au premier 0.08
+  snapshot retenu pour ditto_l0.1   : round moyen  40.1 | part des clients au dernier snapshot 0.43 | au premier 0.02
+  snapshot retenu pour ditto_l0.3   : round moyen  42.1 | part des clients au dernier snapshot 0.43 | au premier 0.01
+  Reproduction sel@1.645 (EXP-Baselines, seeds 423-425 : n_src 0.361 | precision_pair 0.896 | harm_pair 0.049) -> ici : n_src 0.361 | precision_pair 0.896 | harm_pair 0.049
+  Reproduction par seed, moyenne sur TOUS les snapshots, x1e3 (EXP-Baselines 423/424/425 : sel@1.645 +0.17/+0.17/+0.13 | fomo_upd +0.16/+0.14/+0.10 | fedper +0.29/+0.17/+0.09) -> ici : sel@1.645 +0.17/+0.17/+0.13 | fomo_upd +0.16/+0.14/+0.10 | fedper +0.29/+0.17/+0.09
+
+================================================================================================================================================================
+A. PERFORMANCE ET SÉCURITÉ — dBrier x1e3 vs FT_k (>0 = mieux que FT). Modèles persistants : snapshot choisi sur la VALIDATION ; autres règles : moyenne sur les snapshots
+================================================================================================================================================================
+                    rule                    dB_mean     rel dB_allsnap                      CVaR10    worst unchanged                harm_any                harm_mat             per_seed
+FT (= FedAvg + FT local)                     +0.000      0%          -                           0        0         -                       -                       -                    0
+               compat_k2    +0.133 [-0.055, +0.322]  +0.10%     (idem)     -1.087 [-1.496, -0.663]   -1.689      0.00 +0.387 [+0.273, +0.499] +0.326 [+0.218, +0.433]    +0.18/+0.16/+0.06
+               sel@1.645    +0.156 [+0.072, +0.260]  +0.12%     (idem)     -0.095 [-0.255, -0.006]   -0.408      0.67 +0.050 [+0.019, +0.090] +0.024 [+0.004, +0.057]    +0.17/+0.17/+0.13
+                 sel@2.0    +0.113 [+0.049, +0.192]  +0.09%     (idem)     -0.020 [-0.052, -0.001]   -0.076      0.79 +0.020 [+0.006, +0.038] +0.010 [+0.003, +0.019]    +0.12/+0.12/+0.10
+           fedavg_global -29.348 [-37.201, -22.309] -22.24%     (idem) -94.417 [-114.448, -63.201] -121.395      0.00 +0.999 [+0.998, +1.000] +0.999 [+0.998, +1.000] -29.50/-29.46/-29.08
+               fomo_orig    -1.174 [-1.872, -0.544]  -0.89%     (idem)     -6.845 [-8.734, -4.300]   -9.132      0.66 +0.289 [+0.181, +0.410] +0.289 [+0.180, +0.408]    -1.10/-1.06/-1.36
+                fomo_upd    +0.132 [+0.030, +0.241]  +0.10%     (idem)     -0.314 [-0.674, -0.052]   -0.968      0.66 +0.094 [+0.033, +0.171] +0.080 [+0.025, +0.148]    +0.16/+0.14/+0.10
+              local_only    -1.856 [-2.879, -0.951]  -1.40%     -9.934    -9.111 [-13.035, -5.424]  -16.386      0.00 +0.639 [+0.528, +0.736] +0.639 [+0.528, +0.736]    -1.72/-1.78/-2.06
+                  fedper    +0.348 [+0.044, +0.653]  +0.26%     +0.179     -1.503 [-1.943, -0.757]   -2.061      0.00 +0.424 [+0.340, +0.514] +0.403 [+0.326, +0.486]    +0.64/+0.16/+0.25
+            ditto_l0.03*    -0.752 [-1.179, -0.353]  -0.57%     -0.986     -3.686 [-4.569, -2.597]   -4.727      0.00 +0.653 [+0.549, +0.750] +0.646 [+0.542, +0.743]    -1.03/-0.78/-0.45
+              ditto_l0.1    -2.946 [-3.733, -2.252]  -2.23%     -4.159     -8.134 [-9.908, -5.637]  -10.033      0.00 +0.854 [+0.764, +0.931] +0.854 [+0.764, +0.931]    -3.26/-2.97/-2.61
+              ditto_l0.3    -7.893 [-9.366, -6.562]  -5.99%     -9.837  -17.753 [-19.760, -14.331]  -21.143      0.00 +0.958 [+0.903, +1.000] +0.958 [+0.903, +1.000]    -8.62/-8.05/-7.01
+  * = lambda de Ditto retenu. dB_allsnap = même règle sans arrêt anticipé (moyenne des 9 snapshots). unchanged = part des (seed, snapshot, client) où le modèle est identique à FT :
+  une sécurité élevée avec unchanged élevé est en partie mécanique (un modèle inchangé ne peut pas être pire que FT).
+
+================================================================================================================================================================
+B. CONTRASTES APPARIÉS : sel@1.645 - baseline (IC95 bootstrap sur les 48 clients) — mean/dCVaR10 x1e3 (>0 : gate meilleur) ; harm : gate - baseline (<0 : gate plus sûr)
+================================================================================================================================================================
+           vs                       mean                     dCVaR10                harm_mat                harm_any seeds_mean_pos                       lecture
+    compat_k2    +0.023 [-0.117, +0.171]     +0.992 [+0.602, +1.405] -0.302 [-0.405, -0.201] -0.337 [-0.442, -0.233]            2/3 MÊME PRÉCISION, GATE PLUS SÛR
+fedavg_global +29.503 [+22.370, +37.377] +94.322 [+63.177, +114.353] -0.975 [-0.996, -0.941] -0.949 [-0.981, -0.909]            3/3                   GATE DOMINE
+    fomo_orig    +1.329 [+0.713, +2.017]     +6.750 [+4.214, +8.555] -0.265 [-0.384, -0.158] -0.239 [-0.363, -0.129]            3/3                   GATE DOMINE
+     fomo_upd    +0.024 [-0.067, +0.116]     +0.219 [+0.036, +0.422] -0.056 [-0.117, -0.013] -0.044 [-0.116, +0.011]            3/3 MÊME PRÉCISION, GATE PLUS SÛR
+   local_only    +2.011 [+1.108, +3.020]    +9.016 [+5.372, +12.858] -0.615 [-0.715, -0.504] -0.589 [-0.684, -0.479]            3/3                   GATE DOMINE
+       fedper    -0.192 [-0.507, +0.131]     +1.408 [+0.625, +1.855] -0.379 [-0.467, -0.295] -0.373 [-0.463, -0.287]            1/3 MÊME PRÉCISION, GATE PLUS SÛR
+ ditto_l0.03*    +0.908 [+0.490, +1.364]     +3.591 [+2.460, +4.476] -0.622 [-0.725, -0.513] -0.603 [-0.709, -0.489]            3/3                   GATE DOMINE
+   ditto_l0.1    +3.101 [+2.357, +3.922]     +8.039 [+5.538, +9.822] -0.830 [-0.915, -0.736] -0.804 [-0.894, -0.700]            3/3                   GATE DOMINE
+   ditto_l0.3    +8.049 [+6.666, +9.559]  +17.659 [+14.181, +19.753] -0.934 [-0.982, -0.875] -0.908 [-0.968, -0.841]            3/3                   GATE DOMINE
+
+================================================================================================================================================================
+C. PAR TAILLE DE CLIENT (Q1 = 12 plus petits ... Q4 = 12 plus grands) — dBrier x1e3 moyen par quartile
+================================================================================================================================================================
+   compat_k2 sel@1.645 fedavg_global local_only  fedper fomo_upd ditto_l0.03*
+Q1    +0.356    +0.193       -36.102     -3.345  +0.943   +0.269       -0.561
+Q2    +0.422    +0.366       -27.951     -0.575  +0.395   +0.234       -1.733
+Q3    -0.180    +0.029       -36.250     -1.722  +0.007   +0.032       -0.491
+Q4    -0.067    +0.035       -17.087     -1.781  +0.047   -0.008       -0.223
+
+================================================================================================================================================================
+D. LECTURE (règles fixées avant le run ; le verdict porte sur les 5 baselines ci-dessous, Ditto au lambda retenu sur la validation)
+================================================================================================================================================================
+  m (précision) : '+' si l'IC95 de mean(gate - X) est > 0, '-' s'il est < 0, '=' sinon.  s (sécurité) : 'safer' si l'IC95 de harm_mat(gate - X) est < 0, 'riskier' s'il est > 0.
+  t (queue) : 'better' si l'IC95 de dCVaR10 est > 0, 'worse' s'il est < 0.
+  fedavg_global    m=+ s=safer   t=better -> GATE DOMINE
+  local_only       m=+ s=safer   t=better -> GATE DOMINE
+  fedper           m== s=safer   t=better -> MÊME PRÉCISION, GATE PLUS SÛR
+  fomo_upd         m== s=safer   t=better -> MÊME PRÉCISION, GATE PLUS SÛR
+  ditto_l0.03*     m=+ s=safer   t=better -> GATE DOMINE
+
+  Plus précises que le gate (IC95 < 0) : aucune
+  Précision indistincte et gate plus sûr : ['fedper', 'fomo_upd']
+  Gate plus précis (IC95 > 0) : ['fedavg_global', 'local_only', 'ditto_l0.03']
+  [INFO] concurrent le plus proche, fomo_upd : mean +0.024 [-0.067, +0.116] | harm_mat -0.056 [-0.117, -0.013] | harm_any -0.044 [-0.116, +0.011] | unchanged gate 0.67 vs fomo_upd 0.66
+  => Aucune baseline réglée sur la validation n'est significativement plus précise que le gate. Le positionnement 'précision comparable, moins de clients dégradés' tient, avec les réserves : référence FT commune, sécurité en partie mécanique (voir 'unchanged'), traitement favorable aux baselines (snapshot choisi sur la validation).
+
+Total time: 138.9 min
